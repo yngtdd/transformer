@@ -1,0 +1,16 @@
+site_name: Transformer
+
+theme:
+  name: material
+
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [src]  # search packages in the src folder
+
+nav:
+  - Installation: index.md
+  - Introduction: introduction.md
+  - reference: 
+    - Table of Contents: src/reference.md

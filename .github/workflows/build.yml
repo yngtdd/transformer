@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+env:
+  PYTHONUNBUFFERED: "1"
+  FORCE_COLOR: "1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Rye
+        run: |
+          curl -sSf https://rye-up.com/get | RYE_VERSION="0.13.0" RYE_INSTALL_OPTION="--yes" bash
+          echo 'source "$HOME/.rye/env"' >> ~/.bashrc
+
+      - name: Install Throughput
+        run: |
+          source "$HOME/.rye/env"
+          rye sync
+
+      - name: Test with pytest
+        run: |
+          source "$HOME/.rye/env"
+          rye run pytest
+
