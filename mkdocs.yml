@@ -15,3 +15,5 @@ nav:
   - Reference: 
     - Positional Encoding: src/positional_encoding.md
     - Embedding: src/embedding.md
+    - Layer Normalization: src/layer_norm.md
+    - Feed Forward: src/feed_forward.md
