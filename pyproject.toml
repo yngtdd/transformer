@@ -6,7 +6,8 @@ authors = [{ name = "yngtdd", email = "yngtdd@gmail.com" }]
 readme = "README.md"
 requires-python = ">= 3.10"
 dependencies = [
-    "nemo-toolkit==1.21.0"
+    "nemo-toolkit==1.21.0",
+    "lightning==2.1.0"
 ]
 
 [build-system]
