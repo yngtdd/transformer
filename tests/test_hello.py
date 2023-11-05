@@ -1,4 +1,4 @@
-from spoken.hello import hello
+from transformer.hello import hello
 
 
 def test_hello(default_person):
