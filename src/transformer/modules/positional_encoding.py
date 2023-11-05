@@ -19,7 +19,7 @@ class PositionalEncoding(nn.Module):
         self.d_model = d_model
         self.seq_len = seq_len
         self.dropout = nn.Dropout(dropout)
-        self._register_position_encoding(d_model, seq_len)
+        self._register_positional_encoding(d_model, seq_len)
 
     def _register_positional_encoding(self, d_model: int, seq_len: int):
         """Create a positional encoding
@@ -51,6 +51,7 @@ class PositionalEncoding(nn.Module):
         self.register_buffer('positional_encoding', position_encoding)
 
     def forward(self, x):
-        x = x + (self.positional_encoding[:, :x.shape[1], :]).requires_grad(False)
-        return self.dropout(x)
+        with torch.no_grad():
+            x = x + (self.positional_encoding[:, :x.shape[1], :])
+            return self.dropout(x)
 
