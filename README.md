@@ -29,3 +29,18 @@ The test suite can be run, with coverage, using
 hatch run cov
 ```
 
+## Development and Exploration
+
+A Jupyter Lab instance can be launched from any of the project directories using the following command.
+This will launch Jupyter Lab within the `examples/notebooks` directory.
+
+
+```console
+hatch run dev:lab
+```
+
+If you would like something more lightweight, iPython is also included
+
+```console
+hatch run dev:ipython
+```
