@@ -5,12 +5,16 @@ import torch.nn as nn
 class FeedForward(nn.Module):
 
     def __init__(self, d_model: int, d_ff: int, dropout: float):
-        """Feed forward block
+        """Position-wise Feed-Forward block
         
         Args:
             d_model: dimension of the transformer model
             d_ff: hidden layer size in the feed forward block
             dropout: the percent dropout
+
+        Note:
+            See section 3.3 Position-wise Feed-Forward Networks of 
+            "Attention is All You Need"
         """
         super().__init__()
         self.linear_1 = nn.Linear(d_model, d_ff)
