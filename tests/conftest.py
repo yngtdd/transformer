@@ -3,5 +3,5 @@ import pytest
 
 @pytest.fixture
 def default_person():
-    """The default perosn to greet"""
+    """The default person to greet"""
     return "World"

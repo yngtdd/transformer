@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.10"]
 
     steps:
       - uses: actions/checkout@v3
@@ -28,18 +28,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Rye
+      - name: Install dependencies
         run: |
-          curl -sSf https://rye-up.com/get | RYE_VERSION="0.13.0" RYE_INSTALL_OPTION="--yes" bash
-          echo 'source "$HOME/.rye/env"' >> ~/.bashrc
+          python -m pip install --upgrade pip 
+          pip install hatch
 
-      - name: Install Throughput
-        run: |
-          source "$HOME/.rye/env"
-          rye sync
+      - name: Build package
+        run: hatch build
 
-      - name: Test with pytest
-        run: |
-          source "$HOME/.rye/env"
-          rye run pytest
-
+      - name: Test package
+        run: hatch run cov
