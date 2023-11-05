@@ -1,5 +1,8 @@
 # Transformer
 
+[![Build](https://github.com/yngtdd/transformer/actions/workflows/build.yml/badge.svg)](https://github.com/yngtdd/transformer/actions/workflows/build.yml)
+[![docs](https://github.com/yngtdd/transformer/actions/workflows/docs.yml/badge.svg)](https://github.com/yngtdd/transformer/actions/workflows/docs.yml)
+
 ---
 
 ## Installation
