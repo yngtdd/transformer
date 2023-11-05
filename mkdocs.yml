@@ -12,6 +12,6 @@ plugins:
 nav:
   - Installation: index.md
   - Introduction: introduction.md
-  - reference: 
+  - Reference: 
     - Positional Encoding: src/positional_encoding.md
     - Embedding: src/embedding.md

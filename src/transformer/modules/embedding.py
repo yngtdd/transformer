@@ -4,9 +4,14 @@ import torch.nn as nn
 
 
 class InputEmbedding(nn.Module):
-    """Transformer Input Embedding"""
 
     def __init__(self, d_model: int, vocab_size: int):
+        """Transformer Input Embedding
+
+        Args:
+            d_model: the Transformer model dimension
+            vocab_size: number of terms in our vocabulary
+        """
         super().__init__()
         self.d_model = d_model
         self.vocab_size = vocab_size
