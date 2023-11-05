@@ -3,41 +3,25 @@ import torch
 import torch.nn as nn
 
 
-class InputEmbedding(nn.Module):
-    """Transformer Input Embedding"""
-
-    def __init__(self, d_model: int, vocab_size: int):
-        super().__init__()
-        self.d_model = d_model
-        self.vocab_size = vocab_size
-        self.embedding = nn.Embedding(vocab_size, d_model)
-
-    def forward(self, x):
-        """Embed our tokenized inputs
-        
-        Note:
-            Following section 3.4 in "Attention is All You Need",
-            we multiply the embeddings by the square root of the 
-            model's dimension
-        """
-        return self.embedding(x) * math.sqrt(self.d_model)
-
-
-
 class PositionalEncoding(nn.Module):
-    """Trigonometric Positional Encoding
-    
-    Represents the position of a word within a sequence
-    """
 
     def __init__(self, d_model: int, seq_len: int, dropout: float):
+        """Trigonometric Positional Encoding
+    
+        Represents the position of a word within a sequence
+
+        Args:
+            d_model: the Transformer model dimension
+            seq_len: the sequence lenth of our data
+            dropout: the dropout percentage
+        """
         super().__init__()
         self.d_model = d_model
         self.seq_len = seq_len
         self.dropout = nn.Dropout(dropout)
-        self._position_encoding(d_model, seq_len)
+        self._register_position_encoding(d_model, seq_len)
 
-    def _positional_encoding(self, d_model: int, seq_len: int):
+    def _register_positional_encoding(self, d_model: int, seq_len: int):
         """Create a positional encoding
 
         Using trigonometric functions, we create a positional encoding
@@ -47,6 +31,11 @@ class PositionalEncoding(nn.Module):
         Args:
             d_model: the model embedding dimension
             seq_len: the sequence length of our data
+
+        Note:
+            We register the positional encoding as an nn.Module buffer rather
+            than create a set of parameters. This coding is fixed, and we do
+            not want to learn it.
         """
         position_encoding = torch.zeros(seq_len, d_model)
         # Position vector of shape (seq_len, 1)
