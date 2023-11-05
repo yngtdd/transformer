@@ -8,7 +8,8 @@ class PositionalEncoding(nn.Module):
     def __init__(self, d_model: int, seq_len: int, dropout: float):
         """Trigonometric Positional Encoding
     
-        Represents the position of a word within a sequence
+        Represents the position of a word within a sequence following
+        Section 3.5 of "Attention is All you Need".
 
         Args:
             d_model: the Transformer model dimension
