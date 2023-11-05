@@ -1,19 +1,13 @@
 # Transformer
 
-Welcome to documentation for the `Transformer` project. 
+Welcome to documentation for the `Transformer` project.
 
 ---
 
 ## Installation
 
-This project uses [`rye`](https://rye-up.com/guide/), a Python package management system
-built to keeps things development simple and reliable.
-
-Setting up your entire toolchain, creating a virtual environment, and installing `throughput` is
-as simple as
-
 ```console
-rye sync
+hatch build
 ```
 
 ## Documentation
@@ -23,7 +17,7 @@ When offline, a local version of the same documenation can be served in the brow
 
 
 ```console
-rye run docs
+hatch run docs:serve
 ```
 
 ## Tests
@@ -31,13 +25,21 @@ rye run docs
 The test suite can be run, with coverage, using
 
 ```console
-rye run test
+hatch run cov
 ```
 
-## Benchmarks
+## Development and Exploration
 
-The benchmark suite can be run using
+A Jupyter Lab instance can be launched from any of the project directories using the following command.
+This will launch Jupyter Lab within the `examples/notebooks` directory.
+
 
 ```console
-rye run bench
+hatch run dev:lab
+```
+
+If you would like something more lightweight, iPython is also included
+
+```console
+hatch run dev:ipython
 ```

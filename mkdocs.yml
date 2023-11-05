@@ -13,4 +13,5 @@ nav:
   - Installation: index.md
   - Introduction: introduction.md
   - reference: 
-    - Table of Contents: src/reference.md
+    - Positional Encoding: src/positional_encoding.md
+    - Embedding: src/embedding.md
