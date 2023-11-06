@@ -76,7 +76,7 @@ def max_seq_lengths(dataset, tokenizer, config):
     return max_len_src, max_len_target
 
 
-def train_valid_split(dataset, train_percent: float = 0.9)
+def train_valid_split(dataset, train_percent: float = 0.9):
     """Split dataset for training and validation
 
     Args:
