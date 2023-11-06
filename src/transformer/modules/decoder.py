@@ -1,12 +1,10 @@
 import torch
 import torch.nn as nn
 
-from transformer.modules import (
-    MultiHeadAttention, 
-    FeedForward, 
-    Residual, 
-    LayerNormalization
-)
+from transformer.modules.attention import MultiHeadAttention
+from transformer.modules.feed_forward import FeedForward
+from transformer.modules.residual import Residual
+from transformer.modules.layer_norm import LayerNormalization
 
 
 class DecoderBlock(nn.Module):
@@ -22,7 +20,7 @@ class DecoderBlock(nn.Module):
         self.self_attention = self_attention
         self.cross_attention = cross_attention
         self.feed_forward = feed_forward
-        self.residuals = nn.Module([Residual(dropout) for _ in range(3)])
+        self.residuals = nn.ModuleList([Residual(dropout) for _ in range(3)])
 
     def forward(self, x, encoder_output, src_mask, target_mask):
         """"""

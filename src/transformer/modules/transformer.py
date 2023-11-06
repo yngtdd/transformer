@@ -1,15 +1,13 @@
 import torch
 import torch.nn as nn
 
-from transformer.modules import (
-    Encoder,
-    EncoderBlock,
-    Decoder,
-    DecoderBlock,
-    Embedding,
-    PositionalEncoding,
-    LinearProjection
-)
+from transformer.modules.attention import MultiHeadAttention
+from transformer.modules.encoder import Encoder, EncoderBlock
+from transformer.modules.decoder import Decoder, DecoderBlock
+from transformer.modules.embedding import Embedding
+from transformer.modules.positional_encoding import PositionalEncoding
+from transformer.modules.projection import LinearProjection
+from transformer.modules.feed_forward import FeedForward
 
 
 class Transformer(nn.Module):
@@ -115,6 +113,6 @@ def build_transformer(
     # Initialize parameters
     for params in transformer.parameters():
         if params.dim() > 1:
-            nn.init.xavier_uniform(params)
+            nn.init.xavier_uniform_(params)
 
     return transformer
