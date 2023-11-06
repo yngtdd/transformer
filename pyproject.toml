@@ -4,10 +4,10 @@ version = "0.1.0"
 description = "Pytorch implementation of a Transformer"
 authors = [{ name = "yngtdd", email = "yngtdd@gmail.com" }]
 readme = "README.md"
-requires-python = ">= 3.10"
+requires-python = "==3.10.13"
 dependencies = [
+    "lightning==2.1.0",
     "nemo-toolkit==1.21.0",
-    "lightning==2.1.0"
 ]
 
 [build-system]
