@@ -28,7 +28,7 @@ class MultiHeadAttention(nn.Module):
         self.w_v = nn.Linear(d_model, d_model)
         self.w_o = nn.Linear(d_model, d_model)
 
-    def _check_d_model_divisble(self, d_model: int, num_heads: int):
+    def _check_d_model_divisible(self, d_model: int, num_heads: int):
         """Check that `d_model` is divisble by `num_heads`
         
         Args:
