@@ -5,7 +5,7 @@ from tokenizers.trainers import WordLevelTrainer
 from tokenizers.pre_tokenizers import Whitespace
 
 from pathlib import Path
-from torch.utils.data import random_split
+from torch.utils.data import random_split, DataLoader
 from transformer.data.bilingual_dataset import BilingualDataset
 
 
@@ -38,7 +38,7 @@ def get_or_build_tokenizer(config, dataset, lang) -> Tokenizer:
         tokenizer.pre_tokenizer = Whitespace()
 
         trainer = WordLevelTrainer(
-            special_tokens = ["[Unk]", "[PAD]", "[SOS]", "[EOS]"], 
+            special_tokens = ["[UNK]", "[PAD]", "[SOS]", "[EOS]"], 
             min_frequency = 2
         )
 
@@ -87,9 +87,8 @@ def train_valid_split(dataset, train_percent: float = 0.9):
         train: training dataset split
         valid: validation dataset split
     """
-    valid_percent = 1.0 - train_percent
-    train_dataset_size = int(train_percent * len(dataset_raw))
-    valid_dataset_size = int(valid_percent * len(dataset_raw))
+    train_dataset_size = int(train_percent * len(dataset))
+    valid_dataset_size = len(dataset) - train_dataset_size
 
     train_dataset_raw, valid_dataset_raw = random_split(
         dataset, 
@@ -113,26 +112,26 @@ def load_opus_dataset(config):
     """
     dataset_raw = load_dataset(
         "opus_books",
-        f"{config['language_src']}-{config['lang_target']}",
+        f"{config['lang_src']}-{config['lang_target']}",
         split = "train"
     )
 
     tokenizer_src = get_or_build_tokenizer(config, dataset_raw, config["lang_src"])
     tokenizer_target = get_or_build_tokenizer(config, dataset_raw, config["lang_target"])
     train_dataset_raw, valid_dataset_raw = train_valid_split(dataset_raw, train_percent = 0.9)
-    max_len_src, max_len_target = max_seq_lengths(dataset_raw, tokenizer, config)
+    #max_len_src, max_len_target = max_seq_lengths(dataset_raw, tokenizer_src, config)
 
-    if max_len_src > config["seq_len"]:
-        raise ValueError(
-            f"The source sequence length [{config["seq_len"]}] is shorter "
-            "than the dataset max sequence length [{max_len_seq}]"
-        )
+    #if max_len_src > config["seq_len"]:
+    #    raise ValueError(
+    #        f"The source sequence length {config['seq_len']} is shorter "
+    #        f"than the dataset max sequence length {max_len_seq}"
+    #    )
 
-    if max_len_target > config["seq_len"]:
-        raise ValueError(
-            f"The target sequence length [{config["seq_len"]}] is shorter "
-            "than the dataset max sequence length [{max_len_target}]"
-        )
+    #if max_len_target > config["seq_len"]:
+    #    raise ValueError(
+    #        f"The target sequence length {config['seq_len']} is shorter "
+    #        f"than the dataset max sequence length {max_len_target}"
+    #    )
 
     train_dataset = BilingualDataset(
         train_dataset_raw,
@@ -143,7 +142,7 @@ def load_opus_dataset(config):
         config["seq_len"]
     )
 
-    train_dataset = BilingualDataset(
+    valid_dataset = BilingualDataset(
         valid_dataset_raw,
         tokenizer_src,
         tokenizer_target,

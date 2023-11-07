@@ -1,3 +1,4 @@
+import math
 import torch
 import torch.nn as nn
 
@@ -53,17 +54,17 @@ class MultiHeadAttention(nn.Module):
         """
         d_k = query.shape[-1]
 
-        attention_score = (query @ key.transpose(-2, -1)) / math.sqrt(d_k)
+        attention_scores = (query @ key.transpose(-2, -1)) / math.sqrt(d_k)
 
-        if mask:
-            attention_ascore.masked_fill(mask == 0, -1e9)
+        if mask is not None:
+            attention_scores.masked_fill(mask == 0, -1e9)
 
         attention_scores = attention_scores.softmax(dim = -1)
 
-        if dropout:
+        if dropout is not None:
             attention_scores = dropout(attention_scores)
 
-        return (attention_scores @ value), attention_score
+        return (attention_scores @ value), attention_scores
 
     def forward(self, q, k, v, mask):
         """Forward pass
@@ -90,7 +91,7 @@ class MultiHeadAttention(nn.Module):
         key = key.view(key.shape[0], key.shape[1], self.num_heads, self.d_k).transpose(1, 2)
         value = value.view(value.shape[0], value.shape[1], self.num_heads, self.d_k).transpose(1, 2)
 
-        x = self.attention_scores = self.attention(query, key, value, mask, self.dropout)
+        x, self.attention_scores = self.attention(query, key, value, mask, self.dropout)
 
         # (batch, num_heads, seq_len, d_k) -> (batch seq_len, num_heads, d_k) -> (batch seq_len, d_model)
         x = x.transpose(1, 2).contiguous().view(x.shape[0], -1, self.num_heads * self.d_k)

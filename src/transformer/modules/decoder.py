@@ -24,8 +24,8 @@ class DecoderBlock(nn.Module):
 
     def forward(self, x, encoder_output, src_mask, target_mask):
         """"""
-        x = residuals[0](x, lambda x: self.self_attention(x, x, x, target_mask))
-        x = residuals[1](x, lambda x: self.cross_attention(x, encoder_output, encoder_output, src_mask))
+        x = self.residuals[0](x, lambda x: self.self_attention(x, x, x, target_mask))
+        x = self.residuals[1](x, lambda x: self.cross_attention(x, encoder_output, encoder_output, src_mask))
         x = self.residuals[2](x, self.feed_forward)
         return x
 

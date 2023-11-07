@@ -34,7 +34,7 @@ class Transformer(nn.Module):
         self.projection = projection
 
     def encode(self, src, src_mask):
-        src = self.src_embedding(src)
+        src = self.src_embed(src)
         src = self.src_pos(src)
         return self.encoder(src, src_mask)
 
@@ -91,7 +91,7 @@ class LitTransformer(pl.LightningModule):
         )
         pred = self.transformer.project(decoder_output)
         # Reshape the model predictions to be of size (batch, seq_len, target_vocab_size)
-        pred = pred.view(-1 self.target_vocab_size)
+        pred = pred.view(-1, self.target_vocab_size)
         loss = F.cross_entropy(pred, target.view(-1))
         self.log("train_loss", loss)
         return loss
@@ -115,10 +115,14 @@ class LitTransformer(pl.LightningModule):
             decoder_mask
         )
         pred = self.transformer.project(decoder_output)
-        pred = pred.view(-1 self.target_vocab_size)
+        pred = pred.view(-1, self.target_vocab_size)
         loss = F.cross_entropy(pred, target.view(-1))
         self.log("valid_loss", loss)
         return loss
+
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=1e-9)
+        return optimizer
 
 
 def build_transformer(
@@ -173,7 +177,7 @@ def build_transformer(
         decoder_blocks.append(decoder_block)
 
     encoder = Encoder(nn.ModuleList(encoder_blocks))
-    decoder = Encoder(nn.ModuleList(decoder_blocks))
+    decoder = Decoder(nn.ModuleList(decoder_blocks))
     projection = LinearProjection(d_model, target_vocab_size)
 
     transformer = Transformer(
