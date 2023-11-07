@@ -124,12 +124,14 @@ def load_opus_dataset(config):
 
     if max_len_src > config["seq_len"]:
         raise ValueError(
-            f"The source sequence length [{config["seq_len"]}] is shorter than the dataset max sequence length [{max_len_seq}]"
+            f"The source sequence length [{config["seq_len"]}] is shorter "
+            "than the dataset max sequence length [{max_len_seq}]"
         )
 
     if max_len_target > config["seq_len"]:
         raise ValueError(
-            f"The target sequence length [{config["seq_len"]}] is shorter than the dataset max sequence length [{max_len_target}]"
+            f"The target sequence length [{config["seq_len"]}] is shorter "
+            "than the dataset max sequence length [{max_len_target}]"
         )
 
     train_dataset = BilingualDataset(
