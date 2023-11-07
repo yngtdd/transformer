@@ -5,4 +5,4 @@ from .feed_forward import FeedForward
 from .encoder import Encoder, EncoderBlock
 from .decoder import Decoder, DecoderBlock
 from .projection import LinearProjection
-from .transformer import Transformer, build_transformer
+from .transformer import Transformer, LitTransformer, build_transformer

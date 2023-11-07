@@ -180,4 +180,11 @@ def opus_bilingual_dataloaders(config):
         batch_size = config["batch_size"]
     )
 
-    return train_dataloader, valid_dataloader, tokenizer_src, tokenizer_target
+    data_tokenizers = {
+        "train_dataloader": train_dataloader,
+        "valid_dataloader": valid_dataloader,
+        "tokenizer_src": tokenizer_src,
+        "tokenizer_target": tokenizer_target
+    }
+
+    return data_tokenizers

@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+import lightning.pytorch as pl
 
 from transformer.modules.attention import MultiHeadAttention
 from transformer.modules.encoder import Encoder, EncoderBlock
@@ -43,6 +45,80 @@ class Transformer(nn.Module):
 
     def project(self, x):
         return self.projection(x)
+
+
+class LitTransformer(pl.LightningModule):
+
+    def __init__(
+        self, 
+        transformer: Transformer, 
+        pad_token_id: int, 
+        target_vocab_size: int
+    ):
+        """Pytorch Lightning Transformer
+        
+        Args:
+            transformer: our Transformer model
+            pad_token_id: padding token ID from tokenizer. This 
+                is ignored by our loss function.
+            target_vocab_size: size of the target language vocabulary
+
+        Note:
+            A couple
+        """
+        super().__init__()
+        self.transformer = transformer
+        self.pad_token_id = pad_token_id
+        self.target_vocab_size = target_vocab_size
+
+    def training_step(self, batch, batch_idx):
+        """Training step"""
+        encoder_input = batch["encoder_input"]
+        decoder_input = batch["decoder_input"]
+        encoder_mask = batch["encoder_mask"]
+        decoder_mask = batch["decoder_mask"]
+        target = batch["target"]
+
+        encoder_output = self.transformer.encode(
+            encoder_input, 
+            encoder_mask
+        )
+        decoder_output = self.transformer.decode(
+            encoder_output, 
+            encoder_mask, 
+            decoder_input, 
+            decoder_mask
+        )
+        pred = self.transformer.project(decoder_output)
+        # Reshape the model predictions to be of size (batch, seq_len, target_vocab_size)
+        pred = pred.view(-1 self.target_vocab_size)
+        loss = F.cross_entropy(pred, target.view(-1))
+        self.log("train_loss", loss)
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+        """Validation step"""
+        encoder_input = batch["encoder_input"]
+        decoder_input = batch["decoder_input"]
+        encoder_mask = batch["encoder_mask"]
+        decoder_mask = batch["decoder_mask"]
+        target = batch["target"]
+
+        encoder_output = self.transformer.encode(
+            encoder_input, 
+            encoder_mask
+        )
+        decoder_output = self.transformer.decode(
+            encoder_output, 
+            encoder_mask, 
+            decoder_input, 
+            decoder_mask
+        )
+        pred = self.transformer.project(decoder_output)
+        pred = pred.view(-1 self.target_vocab_size)
+        loss = F.cross_entropy(pred, target.view(-1))
+        self.log("valid_loss", loss)
+        return loss
 
 
 def build_transformer(
